@@ -1,9 +1,12 @@
 "use client";
 
+import { stringify } from "querystring";
 import { useEffect, useRef, useState } from "react";
 
 // Order represent value in order: price , size, total
 type Order = [number, number, number?];
+
+const wsURL = "wss://www.cryptofacilities.com/ws/v1";
 
 const coinOption = {
   XBT: {
@@ -31,11 +34,11 @@ export default function OrderBook() {
     asks: [],
   });
   const [gap, setGap] = useState<number>(coinOption[coin].gap[0]);
+  const [socket, setSocket] = useState<WebSocket | null>(null);
   useEffect(() => {
-    const ws = new WebSocket("wss://www.cryptofacilities.com/ws/v1");
-
+    const ws = new WebSocket(wsURL);
     ws.onopen = () => {
-      ws.send(JSON.stringify(coinOption[coin].message));
+      ws.send(JSON.stringify(coinOption["XBT"].message));
     };
 
     let bids: Order[] = [];
@@ -47,7 +50,11 @@ export default function OrderBook() {
         // Processing snapshot Data
         bids = data.bids;
         asks = data.asks;
-      } else if (data.feed === "book_ui_1" && data.event !== "subscribed") {
+      } else if (
+        data.feed === "book_ui_1" &&
+        data.event !== "subscribed" &&
+        data.event !== "unsubscribed"
+      ) {
         // Processing updated delta data
         data.bids.forEach((deltaOrder: Order) => {
           if (deltaOrder[1] === 0) {
@@ -70,12 +77,13 @@ export default function OrderBook() {
       asks.sort((a, b) => a[0] - b[0]); // Descending order
 
       setFeedData({ bids, asks });
+      setSocket(ws);
     };
 
     return () => {
       ws.close();
     };
-  }, [coin]);
+  }, []);
 
   let groupBids = groupingPrice(feedData.bids, gap);
   let groupAsks = groupingPrice(feedData.asks, gap);
@@ -92,6 +100,21 @@ export default function OrderBook() {
     ask[2] = totalAsk;
   });
 
+  function toggleFeed() {
+    const message = {
+      event: "unsubscribe",
+      feed: "book_ui_1",
+      product_ids: coinOption[coin].message.product_ids,
+    };
+
+    socket?.send(JSON.stringify(message));
+    socket?.send(
+      JSON.stringify(coinOption[coin === "XBT" ? "ETH" : "XBT"].message)
+    );
+
+    setCoin((prevCoin) => (prevCoin === "XBT" ? "ETH" : "XBT"));
+  }
+
   return (
     <div>
       <div className="flex justify-around p-5">
@@ -105,7 +128,9 @@ export default function OrderBook() {
             </option>
           ))}
         </select>
-        <button className="p-2 bg-purple-800 rounded-lg">Toggle Feed</button>
+        <button className="p-2 bg-purple-800 rounded-lg" onClick={toggleFeed}>
+          Toggle Feed
+        </button>
       </div>
       <div className="flex items-start">
         <table className="h-fit">
