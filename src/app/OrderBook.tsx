@@ -1,10 +1,9 @@
 "use client";
 
-import { stringify } from "querystring";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 
-// Order represent value in order: price , size, total
-type Order = [number, number, number?];
+// Order represent value in order: price , size, total(optional)
+type Order = number[];
 
 const wsURL = "wss://www.cryptofacilities.com/ws/v1";
 
@@ -87,8 +86,8 @@ export default function OrderBook() {
     };
   }, []);
 
-  let groupBids = groupingPrice(feedData.bids, gap);
-  let groupAsks = groupingPrice(feedData.asks, gap);
+  const groupBids = groupingPrice(feedData.bids, gap);
+  const groupAsks = groupingPrice(feedData.asks, gap);
 
   // Adding total size value
   let totalBid = 0;
@@ -106,7 +105,7 @@ export default function OrderBook() {
     //Unsubscribe from current coin and subscribe to new Coin
     const message = {
       event: "unsubscribe",
-      feed: "book_ui_1",
+      feed: coinOption[coin].message.feed,
       product_ids: coinOption[coin].message.product_ids,
     };
 
