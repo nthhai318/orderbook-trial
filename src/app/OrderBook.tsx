@@ -37,6 +37,8 @@ export default function OrderBook() {
   const [socket, setSocket] = useState<WebSocket | null>(null);
   useEffect(() => {
     const ws = new WebSocket(wsURL);
+
+    // Initial subscribe to data feed
     ws.onopen = () => {
       ws.send(JSON.stringify(coinOption["XBT"].message));
     };
@@ -73,8 +75,8 @@ export default function OrderBook() {
           }
         });
       }
-      bids.sort((a, b) => b[0] - a[0]); // Ascending order
-      asks.sort((a, b) => a[0] - b[0]); // Descending order
+      bids.sort((a, b) => b[0] - a[0]); // Descending order
+      asks.sort((a, b) => a[0] - b[0]); // Ascending order
 
       setFeedData({ bids, asks });
       setSocket(ws);
@@ -101,6 +103,7 @@ export default function OrderBook() {
   });
 
   function toggleFeed() {
+    //Unsubscribe from current coin and subscribe to new Coin
     const message = {
       event: "unsubscribe",
       feed: "book_ui_1",
@@ -129,7 +132,7 @@ export default function OrderBook() {
           ))}
         </select>
         <button className="p-2 bg-purple-800 rounded-lg" onClick={toggleFeed}>
-          Toggle Feed
+          {coin} / USD
         </button>
       </div>
       <div className="flex items-start">
