@@ -121,7 +121,7 @@ export default function OrderBook() {
     <div>
       <div className="flex justify-around p-5">
         <select
-          className="bg-slate-800 p-2 rounded-sm"
+          className="bg-slate-800 p-2 rounded-lg"
           onChange={(e) => setGap(parseFloat(e.target.value))}
         >
           {coinOption[coin].gap.map((num) => (
@@ -134,26 +134,22 @@ export default function OrderBook() {
           {coin} / USD
         </button>
       </div>
-      <div className="flex items-start">
-        <table className="h-fit">
+      <div className="grid grid-cols-2">
+        <table className="h-fit table-fixed w-full">
           <thead>
             <tr>
-              <th className="w-[150px] text-right">Total Bid</th>
-              <th className="w-[150px] text-right">Bid Size</th>
-              <th className="w-[150px] text-right">Bid Price</th>
+              <th className="text-right whitespace-nowrap">Total Bid</th>
+              <th className="text-right whitespace-nowrap">Bid Size</th>
+              <th className="text-right whitespace-nowrap">Bid Price</th>
             </tr>
           </thead>
           <tbody>
             {groupBids.map((bid) => {
               return (
                 <tr key={bid[0]}>
-                  <td className="w-[150px] text-right">
-                    {bid[2]!.toLocaleString()}
-                  </td>
-                  <td className="w-[150px] text-right">
-                    {bid[1].toLocaleString()}
-                  </td>
-                  <td className="w-[150px] text-right">
+                  <td className=" text-right">{bid[2]!.toLocaleString()}</td>
+                  <td className=" text-right">{bid[1].toLocaleString()}</td>
+                  <td className=" text-right">
                     {bid[0].toLocaleString(undefined, {
                       minimumFractionDigits: 2,
                     })}
@@ -163,29 +159,25 @@ export default function OrderBook() {
             })}
           </tbody>
         </table>
-        <table className="h-fit">
+        <table className="h-fit table-fixed w-full">
           <thead>
             <tr>
-              <th className="w-[150px] text-right">Ask Price</th>
-              <th className="w-[150px] text-right">Ask Size</th>
-              <th className="w-[150px] text-right">Total Ask</th>
+              <th className=" text-right whitespace-nowrap">Ask Price</th>
+              <th className=" text-right whitespace-nowrap">Ask Size</th>
+              <th className=" text-right whitespace-nowrap">Total Ask</th>
             </tr>
           </thead>
           <tbody>
             {groupAsks.map((ask) => {
               return (
                 <tr key={ask[0]}>
-                  <td className="w-[150px] text-right">
+                  <td className=" text-right">
                     {ask[0].toLocaleString(undefined, {
                       minimumFractionDigits: 2,
                     })}
                   </td>
-                  <td className="w-[150px] text-right">
-                    {ask[1].toLocaleString()}
-                  </td>
-                  <td className="w-[150px] text-right">
-                    {ask[2]!.toLocaleString()}
-                  </td>
+                  <td className=" text-right">{ask[1].toLocaleString()}</td>
+                  <td className=" text-right">{ask[2]!.toLocaleString()}</td>
                 </tr>
               );
             })}

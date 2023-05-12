@@ -28,4 +28,5 @@ body {
       rgb(var(--background-end-rgb))
     )
     rgb(var(--background-start-rgb));
+  @apply text-[12px] sm:text-[16px];
 }
