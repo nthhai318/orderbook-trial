@@ -14,7 +14,7 @@ const coinOption = {
       feed: "book_ui_1",
       product_ids: ["PI_XBTUSD"],
     },
-    gap: [0.5, 1, 2.5],
+    gap: [0.7, 1, 2.7],
   },
   ETH: {
     message: {
@@ -118,8 +118,8 @@ export default function OrderBook() {
   }
 
   return (
-    <div className="rounded-sm bg-slate-900 p-2 h-[460px]">
-      <div className="flex justify-around p-5">
+    <div className="rounded-sm bg-slate-900 p-2 h-[500px]">
+      <div className="flex justify-around p-7">
         <select
           className="bg-slate-800 p-2 rounded-lg"
           onChange={(e) => setGap(parseFloat(e.target.value))}
@@ -139,9 +139,9 @@ export default function OrderBook() {
           <thead>
             <tr>
               <div></div>
-              <th className="text-right whitespace-nowrap">Total Bid</th>
-              <th className="text-right whitespace-nowrap">Bid Size</th>
-              <th className="text-right whitespace-nowrap">Bid Price</th>
+              <th className="text-right whitespace-nowrap pr-7">Total Bid</th>
+              <th className="text-right whitespace-nowrap pr-7">Bid Size</th>
+              <th className="text-right whitespace-nowrap pr-7">Bid Price</th>
             </tr>
           </thead>
           <tbody>
@@ -152,9 +152,11 @@ export default function OrderBook() {
                     style={{ width: `${(bid[2] / totalBid) * 100}%` }}
                     className="absolute h-full top-0 right-0 bottom-0 bg-red-900 w-full z-[-1]"
                   ></div>
-                  <td className=" text-right">{bid[2]!.toLocaleString()}</td>
-                  <td className=" text-right">{bid[1].toLocaleString()}</td>
-                  <td className=" text-right">
+                  <td className="pr-7 text-right">
+                    {bid[2]!.toLocaleString()}
+                  </td>
+                  <td className="pr-7 text-right">{bid[1].toLocaleString()}</td>
+                  <td className="pr-7 text-right">
                     {bid[0].toLocaleString(undefined, {
                       minimumFractionDigits: 2,
                     })}
@@ -164,12 +166,12 @@ export default function OrderBook() {
             })}
           </tbody>
         </table>
-        <table className="h-fit table-fixed w-full">
+        <table className="h-fit table-fixed w-full relative">
           <thead>
             <tr>
-              <th className=" text-right whitespace-nowrap">Ask Price</th>
-              <th className=" text-right whitespace-nowrap">Ask Size</th>
-              <th className=" text-right whitespace-nowrap">Total Ask</th>
+              <th className="pl-0 text-right whitespace-nowrap">Ask Price</th>
+              <th className="pl-0 text-right whitespace-nowrap">Ask Size</th>
+              <th className="pl-0 text-right whitespace-nowrap">Total Ask</th>
               <div></div>
             </tr>
           </thead>
@@ -177,13 +179,15 @@ export default function OrderBook() {
             {groupAsks.map((ask) => {
               return (
                 <tr key={ask[0]} className="relative z-10">
-                  <td className=" text-right">
+                  <td className="pl-0 text-right">
                     {ask[0].toLocaleString(undefined, {
                       minimumFractionDigits: 2,
                     })}
                   </td>
-                  <td className=" text-right">{ask[1].toLocaleString()}</td>
-                  <td className=" text-right">{ask[2]!.toLocaleString()}</td>
+                  <td className="pl-0 text-right">{ask[1].toLocaleString()}</td>
+                  <td className="pl-0 text-right">
+                    {ask[2]!.toLocaleString()}
+                  </td>
                   <div
                     style={{ width: `${(ask[2] / totalAsk) * 100}%` }}
                     className="absolute h-full top-0 left-0 bottom-0 bg-green-900 w-full z-[-1]"
