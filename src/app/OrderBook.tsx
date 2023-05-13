@@ -86,8 +86,8 @@ export default function OrderBook() {
     };
   }, []);
 
-  const groupBids = groupingPrice(feedData.bids, gap);
-  const groupAsks = groupingPrice(feedData.asks, gap);
+  const groupBids = groupingPrice(feedData.bids, gap).slice(0, 13);
+  const groupAsks = groupingPrice(feedData.asks, gap).slice(0, 13);
 
   // Adding total size value
   let totalBid = 0;
@@ -118,7 +118,7 @@ export default function OrderBook() {
   }
 
   return (
-    <div>
+    <div className="rounded-sm bg-slate-900 p-2 h-[460px]">
       <div className="flex justify-around p-5">
         <select
           className="bg-slate-800 p-2 rounded-lg"
@@ -138,6 +138,7 @@ export default function OrderBook() {
         <table className="h-fit table-fixed w-full">
           <thead>
             <tr>
+              <div></div>
               <th className="text-right whitespace-nowrap">Total Bid</th>
               <th className="text-right whitespace-nowrap">Bid Size</th>
               <th className="text-right whitespace-nowrap">Bid Price</th>
@@ -146,7 +147,11 @@ export default function OrderBook() {
           <tbody>
             {groupBids.map((bid) => {
               return (
-                <tr key={bid[0]}>
+                <tr key={bid[0]} className="relative z-10">
+                  <div
+                    style={{ width: `${(bid[2] / totalBid) * 100}%` }}
+                    className="absolute h-full top-0 right-0 bottom-0 bg-red-900 w-full z-[-1]"
+                  ></div>
                   <td className=" text-right">{bid[2]!.toLocaleString()}</td>
                   <td className=" text-right">{bid[1].toLocaleString()}</td>
                   <td className=" text-right">
@@ -165,12 +170,13 @@ export default function OrderBook() {
               <th className=" text-right whitespace-nowrap">Ask Price</th>
               <th className=" text-right whitespace-nowrap">Ask Size</th>
               <th className=" text-right whitespace-nowrap">Total Ask</th>
+              <div></div>
             </tr>
           </thead>
           <tbody>
             {groupAsks.map((ask) => {
               return (
-                <tr key={ask[0]}>
+                <tr key={ask[0]} className="relative z-10">
                   <td className=" text-right">
                     {ask[0].toLocaleString(undefined, {
                       minimumFractionDigits: 2,
@@ -178,6 +184,10 @@ export default function OrderBook() {
                   </td>
                   <td className=" text-right">{ask[1].toLocaleString()}</td>
                   <td className=" text-right">{ask[2]!.toLocaleString()}</td>
+                  <div
+                    style={{ width: `${(ask[2] / totalAsk) * 100}%` }}
+                    className="absolute h-full top-0 left-0 bottom-0 bg-green-900 w-full z-[-1]"
+                  ></div>
                 </tr>
               );
             })}
