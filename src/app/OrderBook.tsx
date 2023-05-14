@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 // Order represent value in order: price , size, total(optional)
 type Order = number[];
@@ -114,6 +114,7 @@ export default function OrderBook() {
       JSON.stringify(coinOption[coin === "XBT" ? "ETH" : "XBT"].message)
     );
 
+    setGap(coinOption[coin === "XBT" ? "ETH" : "XBT"].gap[0]);
     setCoin((prevCoin) => (prevCoin === "XBT" ? "ETH" : "XBT"));
   }
 
