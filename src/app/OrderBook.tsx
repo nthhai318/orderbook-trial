@@ -14,7 +14,7 @@ const coinOption = {
       feed: "book_ui_1",
       product_ids: ["PI_XBTUSD"],
     },
-    gap: [0.7, 1, 2.7],
+    gap: [0.5, 1, 2.5],
   },
   ETH: {
     message: {
